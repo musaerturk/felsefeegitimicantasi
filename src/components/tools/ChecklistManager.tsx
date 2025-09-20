@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Tool, Classroom, Checklist, ChecklistState, ChecklistItem, Student } from '../../types.ts';
+import { Tool, Classroom, Checklist, ChecklistState } from '../../types.ts';
 import Button from '../ui/Button.tsx';
 import Card from '../ui/Card.tsx';
 import { useClassroomManager } from '../../hooks/useClassroomManager.ts';
@@ -37,7 +37,7 @@ const ChecklistManager: React.FC<Props> = ({ onBack }) => {
 
     const handleSelectClass = (classId: string) => {
         setSelectedChecklist(null);
-        setSelectedClass(classrooms.find((c: Classroom) => c.id === classId) || null);
+        setSelectedClass(classrooms.find(c => c.id === classId) || null);
     };
 
     const handleItemTextChange = (index: number, text: string) => {
@@ -89,7 +89,7 @@ const ChecklistManager: React.FC<Props> = ({ onBack }) => {
                                     className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 >
                                     <option value="" disabled>-- Sınıf Seç --</option>
-                                    {classrooms.map((c: Classroom) => <option key={c.id} value={c.id}>{c.name}</option>)}
+                                    {classrooms.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                                 </select>
                             </div>
                         ) : (
@@ -117,7 +117,7 @@ const ChecklistManager: React.FC<Props> = ({ onBack }) => {
                         <thead>
                             <tr>
                                 <th className="sticky left-0 bg-gray-800 p-2 border border-gray-700 text-left">Öğrenci</th>
-                                {selectedChecklist.items.map((item: ChecklistItem) => (
+                                {selectedChecklist.items.map(item => (
                                     <th key={item.id} className="p-2 border border-gray-700 align-bottom min-w-[150px]">
                                         <div className="text-sm font-medium -rotate-45 origin-bottom-left translate-x-3 -translate-y-1/2 whitespace-nowrap">
                                             {item.text}
@@ -127,10 +127,10 @@ const ChecklistManager: React.FC<Props> = ({ onBack }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {selectedClass.students.map((student: Student) => (
+                            {selectedClass.students.map(student => (
                                 <tr key={student.id}>
                                     <th scope="row" className="sticky left-0 bg-gray-800 p-2 border border-gray-700 text-left font-medium">{student.name}</th>
-                                    {selectedChecklist.items.map((item: ChecklistItem, index: number) => {
+                                    {selectedChecklist.items.map((item, index) => {
                                         const studentStates = currentData[student.id] || [];
                                         const currentState = studentStates[index] || null;
                                         return (
@@ -170,11 +170,11 @@ const ChecklistManager: React.FC<Props> = ({ onBack }) => {
             <div className="space-y-4">
                 <Accordion title="Hazır Listeler" isOpen={true} onToggle={() => {}}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {allChecklists.filter((c: Checklist) => !c.isCustom).map((checklist: Checklist) => (
+                        {allChecklists.filter(c => !c.isCustom).map(checklist => (
                             <Card key={checklist.id} onClick={() => setSelectedChecklist(checklist)} className="cursor-pointer">
                                 <h4 className="font-semibold text-lg">{checklist.title}</h4>
                                 <ul className="text-xs text-gray-400 mt-2 list-disc pl-4">
-                                    {checklist.items.slice(0, 3).map((item: ChecklistItem) => <li key={item.id}>{item.text}</li>)}
+                                    {checklist.items.slice(0, 3).map(item => <li key={item.id}>{item.text}</li>)}
                                 </ul>
                             </Card>
                         ))}
@@ -182,14 +182,14 @@ const ChecklistManager: React.FC<Props> = ({ onBack }) => {
                 </Accordion>
                 <Accordion title="Özel Listelerim" isOpen={true} onToggle={() => {}}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {allChecklists.filter((c: Checklist) => c.isCustom).map((checklist: Checklist) => (
+                        {allChecklists.filter(c => c.isCustom).map(checklist => (
                             <Card key={checklist.id} onClick={() => setSelectedChecklist(checklist)} className="cursor-pointer">
                                 <div className="flex justify-between items-start">
                                     <h4 className="font-semibold text-lg flex-grow">{checklist.title}</h4>
                                     <button onClick={(e) => { e.stopPropagation(); if (window.confirm('Bu listeyi silmek istediğinizden emin misiniz?')) deleteCustomChecklist(checklist.id); }} className="text-rose-400 hover:text-rose-300 text-xl">&times;</button>
                                 </div>
                                 <ul className="text-xs text-gray-400 mt-2 list-disc pl-4">
-                                    {checklist.items.slice(0, 3).map((item: ChecklistItem) => <li key={item.id}>{item.text}</li>)}
+                                    {checklist.items.slice(0, 3).map(item => <li key={item.id}>{item.text}</li>)}
                                 </ul>
                             </Card>
                         ))}
