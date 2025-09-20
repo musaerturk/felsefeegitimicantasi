@@ -1,14 +1,14 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { Grade, Tool, StoredFile, UnitData } from '../../types';
-import { generateLessonPlan, generateLessonPlanGrade11 } from '../../services/geminiService';
-import Button from '../ui/Button';
-import ToolViewWrapper from './ToolViewWrapper';
-import { useDatabase } from '../../hooks/useDatabase';
-import { useUnitDatabase } from '../../hooks/useUnitDatabase';
-import PlanOutput from '../ui/PlanOutput';
-import { ogrenmeCiktilariOptions10, ogrenmeCiktilariOptions11, alanBecerileriOptions, kavramsalBecerilerOptions, egilimlerOptions, sosyalDuygusalOptions, degerlerOptions, okuryazarlikOptions, OptionNode } from '../../data/unitDatabaseOptions';
-import Accordion from '../ui/Accordion';
-import MultiSelectModal from '../ui/MultiSelectModal';
+import { Grade, Tool, StoredFile, UnitData, UnitTopic } from '../../types.ts';
+import { generateLessonPlan, generateLessonPlanGrade11 } from '../../services/geminiService.ts';
+import Button from '../ui/Button.tsx';
+import ToolViewWrapper from './ToolViewWrapper.tsx';
+import { useDatabase } from '../../hooks/useDatabase.ts';
+import { useUnitDatabase } from '../../hooks/useUnitDatabase.ts';
+import PlanOutput from '../ui/PlanOutput.tsx';
+import { ogrenmeCiktilariOptions10, ogrenmeCiktilariOptions11, alanBecerileriOptions, kavramsalBecerilerOptions, egilimlerOptions, sosyalDuygusalOptions, degerlerOptions, okuryazarlikOptions, OptionNode } from '../../data/unitDatabaseOptions.ts';
+import Accordion from '../ui/Accordion.tsx';
+import MultiSelectModal from '../ui/MultiSelectModal.tsx';
 
 interface Props {
   grade: Grade;
@@ -16,9 +16,9 @@ interface Props {
 }
 
 const outcomeMap11 = new Map<string, string>();
-ogrenmeCiktilariOptions11.forEach(unit => {
+ogrenmeCiktilariOptions11.forEach((unit: OptionNode) => {
     if (unit.children) {
-        unit.children.forEach(outcome => {
+        unit.children.forEach((outcome: OptionNode) => {
             outcomeMap11.set(outcome.id + '.', outcome.label);
             outcomeMap11.set(outcome.id.replace(/\./g, '') + '.', outcome.label); // Handle variations
         });

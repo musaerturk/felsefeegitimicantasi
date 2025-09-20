@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { Grade, Tool, UnitData } from '../../types';
-import ToolViewWrapper from './ToolViewWrapper';
-import { useUnitDatabase } from '../../hooks/useUnitDatabase';
-import Accordion from '../ui/Accordion';
-import Button from '../ui/Button';
-import MultiSelectModal from '../ui/MultiSelectModal';
+import { Grade, Tool, UnitData, UnitTopic } from '../../types.ts';
+import ToolViewWrapper from './ToolViewWrapper.tsx';
+import { useUnitDatabase } from '../../hooks/useUnitDatabase.ts';
+import Accordion from '../ui/Accordion.tsx';
+import Button from '../ui/Button.tsx';
+import MultiSelectModal from '../ui/MultiSelectModal.tsx';
 import { 
     alanBecerileriOptions, 
     egilimlerOptions, 
@@ -15,8 +15,8 @@ import {
     ogrenmeCiktilariOptions11,
     kavramsalBecerilerOptions,
     OptionNode 
-} from '../../data/unitDatabaseOptions';
-import Card from '../ui/Card';
+} from '../../data/unitDatabaseOptions.ts';
+import Card from '../ui/Card.tsx';
 
 interface Props {
   grade: Grade;
@@ -24,9 +24,9 @@ interface Props {
 }
 
 const outcomeMap11 = new Map<string, string>();
-ogrenmeCiktilariOptions11.forEach(unit => {
+ogrenmeCiktilariOptions11.forEach((unit: OptionNode) => {
     if (unit.children) {
-        unit.children.forEach(outcome => {
+        unit.children.forEach((outcome: OptionNode) => {
             outcomeMap11.set(outcome.id + '.', outcome.label);
             // Handle variations like "11.1.1." vs "1111."
             outcomeMap11.set(outcome.id.replace(/\./g, '') + '.', outcome.label); 
@@ -171,7 +171,7 @@ const UnitDatabase: React.FC<Props> = ({ grade, onBack }) => {
                 />
             )}
             <div className="flex border-b border-gray-700 mb-4 overflow-x-auto">
-                {units.map((_, index) => (
+                {units.map((unit: UnitData, index: number) => (
                     <button
                         key={index}
                         onClick={() => setActiveUnitIndex(index)}

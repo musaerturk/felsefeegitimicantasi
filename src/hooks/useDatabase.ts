@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { StoredFile, DatabaseKey, Grade } from '../types';
+import { StoredFile, DatabaseKey, Grade } from '../types.ts';
 
 const STORAGE_KEY_PREFIX = 'philosophy_database_files_';
 

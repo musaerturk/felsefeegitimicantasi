@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { Grade, UnitData, UnitTopic } from '../types';
+import { Grade, UnitData, UnitTopic } from '../types.ts';
 
 const STORAGE_KEY_PREFIX = 'philosophy_unit_database_';
 
