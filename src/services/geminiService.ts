@@ -258,14 +258,14 @@ Yukarıdaki bağlamı dikkate alarak, aşağıdaki iki bölüm için içerik olu
 
 export const generateExam = async (grade: number, outcomes: string[], count: number, type: string, dbFiles: StoredFile[]): Promise<Question[] | null> => {
      const fileReferencePrompt = dbFiles.length > 0
-        ? `Ekteki referans dokümanlarını ('${dbFiles.map(f => f.name).join("', '")}') ana kaynak olarak kullanarak, `
+        ? `Ekteki referans dokümanlarını ('${dbFiles.map((f: StoredFile) => f.name).join("', '")}') ana kaynak olarak kullanarak, `
         : '';
     
     const outcomeLabels = outcomes.join('\n- ');
     const prompt = `${fileReferencePrompt}${grade}. sınıf felsefe dersi için, aşağıdaki öğrenme çıktılarını kapsayan bir sınav hazırla:\n\n**Öğrenme Çıktıları:**\n- ${outcomeLabels}\n\n**Sınav İçeriği:**\n- Toplam ${count} adet "${type}" tipinde soru.\n\nÇıktıyı, her bir nesnenin 'question' (soru metni) ve 'answer' (cevap metni) anahtarlarına sahip olduğu bir JSON nesneleri dizisi olarak formatla. Eğer hiç soru üretemezsen, boş bir dizi döndür.`;
     
     try {
-        const fileParts = dbFiles.map(file => ({
+        const fileParts = dbFiles.map((file: StoredFile) => ({
             inlineData: {
                 data: file.content,
                 mimeType: file.mimeType,
