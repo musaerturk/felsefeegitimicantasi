@@ -7,7 +7,6 @@ import Card from '../ui/Card.tsx';
 // --- Internal Hook for Daily Notes ---
 const useCalendarNotes = ({ grade }: { grade: Grade }) => {
   const STORAGE_KEY_PREFIX = 'philosophy_calendar_notes_v2_';
-  // FIX: Corrected CalendarData type to be a direct map from date string to CalendarNote.
   type CalendarData = Record<string, CalendarNote>; // Key is YYYY-MM-DD
   const storageKey = `${STORAGE_KEY_PREFIX}${grade}`;
 
@@ -83,7 +82,7 @@ const Agenda: React.FC<Props> = ({ grade, onBack }) => {
         ];
         
         const holidayStartTimes = new Set(HOLIDAY_PERIODS.map(p => p.start.getTime()));
-        const holidayTitles = HOLIDAY_PERIODS.reduce((acc, p) => {
+        const holidayTitles = HOLIDAY_PERIODS.reduce((acc: Record<number, string>, p: {start: Date, title: string}) => {
             acc[p.start.getTime()] = p.title;
             return acc;
         }, {} as Record<number, string>);

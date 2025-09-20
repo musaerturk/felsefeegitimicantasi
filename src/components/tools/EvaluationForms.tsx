@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Tool, EvaluationForm, Classroom, AllEvaluationData, YesNoEvaluationForm, MultiChoiceEvaluationForm, EvaluationStudentData, FreeTextEvaluationForm, RubricEvaluationForm } from '../../types.ts';
+import { Tool, EvaluationForm, Classroom, AllEvaluationData, YesNoEvaluationForm, MultiChoiceEvaluationForm, EvaluationStudentData, FreeTextEvaluationForm, RubricEvaluationForm, Student } from '../../types.ts';
 import Button from '../ui/Button.tsx';
 import Card from '../ui/Card.tsx';
 import { CheckBadgeIcon, AcademicCapIcon, PrinterIcon, DownloadIcon } from '../ui/Icons.tsx';
@@ -697,7 +697,7 @@ const PrintLayout: React.FC<{ form: EvaluationForm, classData?: any, classroom?:
         return <>{renderStudentForm(null)}</>;
     }
 
-    return <>{classroom?.students.map(s => renderStudentForm(classData?.[s.id], s.name))}</>;
+    return <>{classroom?.students.map((s: Student) => renderStudentForm(classData?.[s.id], s.name))}</>;
 };
 
 // --- Main Component ---
@@ -816,9 +816,9 @@ const EvaluationForms: React.FC<Props> = ({ onBack }) => {
                     <h3 className="text-2xl font-bold mb-2">Sınıf Seçin</h3>
                     <p className="text-gray-400 mb-6">Hangi sınıf için değerlendirme yapmak istiyorsunuz?</p>
                     {classrooms.length > 0 ? (
-                        <select onChange={(e) => setSelectedClass(classrooms.find(c => c.id === e.target.value) || null)} defaultValue="" className="w-full max-w-xs mx-auto bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <select onChange={(e) => setSelectedClass(classrooms.find((c: Classroom) => c.id === e.target.value) || null)} defaultValue="" className="w-full max-w-xs mx-auto bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             <option value="" disabled>-- Sınıf Seç --</option>
-                            {classrooms.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                            {classrooms.map((c: Classroom) => <option key={c.id} value={c.id}>{c.name}</option>)}
                         </select>
                     ) : <p className="text-amber-400">Önce "Sınıflarım" aracını kullanarak bir sınıf oluşturmalısınız.</p>}
                 </div>
