@@ -65,13 +65,12 @@ const App: React.FC = () => {
       case Tool.DATABASE_MANAGEMENT:
         return <DatabaseManagement grade={selectedGrade} onBack={goBackToToolbox} />;
       case Tool.DEGERLENDIRME_OLCEKLERI:
+      case Tool.CHECKLISTS:
         return <EvaluationScales onBack={goBackToToolbox} />;
       case Tool.SINIFLARIM:
         return <ClassroomManager onBack={goBackToToolbox} />;
       case Tool.ETKINLIK_HAVUZU:
         return <ActivityPool grade={selectedGrade} onBack={goBackToToolbox} />;
-      case Tool.CHECKLISTS:
-        return <EvaluationScales onBack={goBackToToolbox} />;
       default:
         return <Toolbox onSelectTool={handleToolSelect} grade={selectedGrade} />;
     }

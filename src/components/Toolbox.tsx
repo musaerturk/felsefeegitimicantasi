@@ -7,12 +7,9 @@ import {
   DocumentTextIcon,
   LightBulbIcon,
   ChartBarIcon,
-  DatabaseIcon,
-  ArchiveBoxIcon,
   CheckBadgeIcon,
   UsersIcon,
-  SparklesIcon,
-  ClipboardDocumentCheckIcon
+  SparklesIcon
 } from './ui/Icons.tsx';
 
 interface ToolboxProps {
