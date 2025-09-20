@@ -1,8 +1,6 @@
-
-
 import React from 'react';
-import { Grade, Tool } from '../types';
-import Card from './ui/Card';
+import { Grade, Tool } from '../types.ts';
+import Card from './ui/Card.tsx';
 import {
   CalendarIcon,
   BookIcon,
@@ -15,7 +13,7 @@ import {
   UsersIcon,
   SparklesIcon,
   ClipboardDocumentCheckIcon
-} from './ui/Icons';
+} from './ui/Icons.tsx';
 
 interface ToolboxProps {
   onSelectTool: (tool: Tool) => void;

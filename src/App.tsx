@@ -1,20 +1,19 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
-import { Grade, Tool } from './types';
-import GradeSelector from './components/GradeSelector';
-import Toolbox from './components/Toolbox';
-import Header from './components/ui/Header';
-import Agenda from './components/tools/Agenda';
-import LessonPlanner from './components/tools/LessonPlanner';
-import ExamGenerator from './components/tools/ExamGenerator';
-import QuestionBank from './components/tools/QuestionBank';
-import ExamAnalyzer from './components/tools/ExamAnalyzer';
-import DatabaseManagement from './components/tools/DatabaseManagement';
-import UnitDatabase from './components/tools/UnitDatabase';
-import ClassroomManager from './components/tools/ClassroomManager';
-import ActivityPool from './components/tools/ActivityPool';
-import EvaluationScales from './components/tools/EvaluationScales';
-import { LogoIcon } from './components/ui/Icons';
+import { Grade, Tool } from './types.ts';
+import GradeSelector from './components/GradeSelector.tsx';
+import Toolbox from './components/Toolbox.tsx';
+import Header from './components/ui/Header.tsx';
+import Agenda from './components/tools/Agenda.tsx';
+import LessonPlanner from './components/tools/LessonPlanner.tsx';
+import ExamGenerator from './components/tools/ExamGenerator.tsx';
+import QuestionBank from './components/tools/QuestionBank.tsx';
+import ExamAnalyzer from './components/tools/ExamAnalyzer.tsx';
+import DatabaseManagement from './components/tools/DatabaseManagement.tsx';
+import UnitDatabase from './components/tools/UnitDatabase.tsx';
+import ClassroomManager from './components/tools/ClassroomManager.tsx';
+import ActivityPool from './components/tools/ActivityPool.tsx';
+import EvaluationScales from './components/tools/EvaluationScales.tsx';
+import { LogoIcon } from './components/ui/Icons.tsx';
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Grade } from '../types';
-import Card from './ui/Card';
+import { Grade } from '../types.ts';
+import Card from './ui/Card.tsx';
 
 interface GradeSelectorProps {
   onSelectGrade: (grade: Grade) => void;

@@ -1,11 +1,9 @@
-
-
 import React, { useState } from 'react';
-import Button from './Button';
-import { Grade, Question, QuestionType } from '../../types';
-import { useQuestionBank } from '../../hooks/useQuestionBank';
-import Accordion from './Accordion';
-import { useUnitDatabase } from '../../hooks/useUnitDatabase';
+import Button from './Button.tsx';
+import { Grade, Question, QuestionType } from '../../types.ts';
+import { useQuestionBank } from '../../hooks/useQuestionBank.ts';
+import Accordion from './Accordion.tsx';
+import { useUnitDatabase } from '../../hooks/useUnitDatabase.ts';
 
 interface QuestionBankModalProps {
     grade: Grade;
@@ -65,7 +63,7 @@ const QuestionBankModal: React.FC<QuestionBankModalProps> = ({ grade, onClose, o
                                         return (
                                         <Accordion key={type} title={`${questionType} (${currentQuestions.length} Soru)`} isSubAccordion isOpen={!!openAccordions[accordionId]} onToggle={() => toggleAccordion(accordionId)}>
                                             <div className="space-y-2">
-                                                {currentQuestions.map((q, index) => {
+                                                {currentQuestions.map((q: Question, index: number) => {
                                                     const isSelected = Array.from(selectedQuestions).some(sq => sq.question === q.question);
                                                     return (
                                                         <label key={index} className="flex items-start space-x-3 p-2 rounded hover:bg-gray-700/50 cursor-pointer">

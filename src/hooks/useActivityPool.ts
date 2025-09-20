@@ -1,13 +1,13 @@
 import { useState, useMemo } from 'react';
-import { activityPoolData } from '../data/activityPoolData';
-import { Activity, ActivityCategory } from '../types';
+import { activityPoolData } from '../data/activityPoolData.ts';
+import { Activity, ActivityCategory } from '../types.ts';
 
 export const useActivityPool = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<ActivityCategory | 'all'>('all');
 
     const filteredActivities = useMemo(() => {
-        return activityPoolData.filter(activity => {
+        return activityPoolData.filter((activity: Activity) => {
             const matchesCategory = selectedCategory === 'all' || activity.category === selectedCategory;
             const matchesSearch = searchTerm === '' ||
                 activity.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -17,7 +17,7 @@ export const useActivityPool = () => {
     }, [searchTerm, selectedCategory]);
 
     const categories: ActivityCategory[] = useMemo(() => {
-        return [...new Set(activityPoolData.map(a => a.category))] as ActivityCategory[];
+        return [...new Set(activityPoolData.map((a: Activity) => a.category))] as ActivityCategory[];
     }, []);
 
     return {

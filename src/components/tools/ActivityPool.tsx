@@ -1,17 +1,15 @@
-
-
 import React, { useState, useMemo, useEffect } from 'react';
-import { Tool, Activity, ActivityCategory, Grade, activityCategories } from '../../types';
-import ToolViewWrapper from './ToolViewWrapper';
-import { useActivityPool } from '../../hooks/useActivityPool';
-import Card from '../ui/Card';
-import { SparklesIcon } from '../ui/Icons';
-import ActivityModal from '../ui/ActivityModal';
-import { useUnitDatabase } from '../../hooks/useUnitDatabase';
-import { generateActivity } from '../../services/geminiService';
-import Button from '../ui/Button';
-import Loader from '../ui/Loader';
-import { ogrenmeCiktilariOptions11 } from '../../data/unitDatabaseOptions';
+import { Tool, Activity, ActivityCategory, Grade, activityCategories } from '../../types.ts';
+import ToolViewWrapper from './ToolViewWrapper.tsx';
+import { useActivityPool } from '../../hooks/useActivityPool.ts';
+import Card from '../ui/Card.tsx';
+import { SparklesIcon } from '../ui/Icons.tsx';
+import ActivityModal from '../ui/ActivityModal.tsx';
+import { useUnitDatabase } from '../../hooks/useUnitDatabase.ts';
+import { generateActivity } from '../../services/geminiService.ts';
+import Button from '../ui/Button.tsx';
+import Loader from '../ui/Loader.tsx';
+import { ogrenmeCiktilariOptions11, OptionNode } from '../../data/unitDatabaseOptions.ts';
 
 interface Props {
   onBack: () => void;
@@ -19,9 +17,9 @@ interface Props {
 }
 
 const outcomeMap11 = new Map<string, string>();
-ogrenmeCiktilariOptions11.forEach(unit => {
+ogrenmeCiktilariOptions11.forEach((unit: OptionNode) => {
     if (unit.children) {
-        unit.children.forEach(outcome => {
+        unit.children.forEach((outcome: OptionNode) => {
             outcomeMap11.set(outcome.id + '.', outcome.label);
             outcomeMap11.set(outcome.id.replace(/\./g, '') + '.', outcome.label); 
         });

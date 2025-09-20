@@ -1,7 +1,6 @@
-
 import React from 'react';
-import { Grade } from '../../types';
-import { LogoIcon } from './Icons';
+import { Grade } from '../../types.ts';
+import { LogoIcon } from './Icons.tsx';
 
 interface HeaderProps {
   selectedGrade: Grade | null;

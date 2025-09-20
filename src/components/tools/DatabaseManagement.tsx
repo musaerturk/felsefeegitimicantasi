@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
-import { Tool, DatabaseKey, Grade } from '../../types';
-import ToolViewWrapper from './ToolViewWrapper';
-import Card from '../ui/Card';
-import Button from '../ui/Button';
-import Accordion from '../ui/Accordion';
-import { useDatabase } from '../../hooks/useDatabase';
+import { Tool, DatabaseKey, Grade } from '../../types.ts';
+import ToolViewWrapper from './ToolViewWrapper.tsx';
+import Card from '../ui/Card.tsx';
+import Button from '../ui/Button.tsx';
+import Accordion from '../ui/Accordion.tsx';
+import { useDatabase } from '../../hooks/useDatabase.ts';
 
 interface Props {
   grade: Grade;
@@ -132,6 +132,7 @@ const databaseStructure: Node[] = [
 ];
 
 
+// FIX: Added the missing DatabaseManagement component and its default export.
 const DatabaseManagement: React.FC<Props> = ({ grade, onBack }) => {
     const { files, uploadFile, deleteFile } = useDatabase({ grade });
     const [openAccordions, setOpenAccordions] = useState<Record<string, boolean>>({});
@@ -207,6 +208,7 @@ const DatabaseManagement: React.FC<Props> = ({ grade, onBack }) => {
                                     <input
                                         type="file"
                                         accept=".pdf,.txt,.md"
+                                        // FIX: Wrapped assignment in braces to ensure the ref callback returns void.
                                         ref={el => {fileInputRefs.current[key] = el;}}
                                         onChange={(e) => handleFileChange(key, e)}
                                         className="hidden"

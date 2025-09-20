@@ -1,19 +1,23 @@
 import React, { useState, useCallback, useMemo, useRef } from 'react';
-import { Grade, Tool, StoredFile, Question, QuestionType, questionTypes } from '../../types';
-import { generateExam } from '../../services/geminiService';
-import Button from '../ui/Button';
-import ToolViewWrapper from './ToolViewWrapper';
-import { useDatabase } from '../../hooks/useDatabase';
-import { useUnitDatabase } from '../../hooks/useUnitDatabase';
-import QuestionBankModal from '../ui/QuestionBankModal';
-import { DocumentPlusIcon, PrinterIcon } from '../ui/Icons';
-import Card from '../ui/Card';
+import { Grade, Tool, StoredFile, Question, QuestionType, questionTypes } from '../../types.ts';
+import { generateExam } from '../../services/geminiService.ts';
+import Button from '../ui/Button.tsx';
+import ToolViewWrapper from './ToolViewWrapper.tsx';
+import { useDatabase } from '../../hooks/useDatabase.ts';
+import { useUnitDatabase } from '../../hooks/useUnitDatabase.ts';
+import QuestionBankModal from '../ui/QuestionBankModal.tsx';
+import { DocumentPlusIcon, PrinterIcon, DownloadIcon } from '../ui/Icons.tsx';
+import Card from '../ui/Card.tsx';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import Loader from '../ui/Loader.tsx';
 
 interface Props {
   grade: Grade;
   onBack: () => void;
 }
 
+// Component for on-screen display (dark theme)
 const PrintableExam: React.FC<{ questions: Question[]; title: string; }> = ({ questions, title }) => {
     return (
         <div id="printable-exam" className="bg-gray-900/50 p-6 rounded-md">
@@ -36,6 +40,28 @@ const PrintableExam: React.FC<{ questions: Question[]; title: string; }> = ({ qu
     );
 };
 
+// Component for PDF/Print rendering (light theme)
+const PdfExamContent: React.FC<{ questions: Question[]; title: string; }> = ({ questions, title }) => (
+    <div className="p-8 bg-white text-black font-sans text-sm" style={{ width: '210mm' }}>
+        <h3 className="text-xl font-bold text-center mb-2" style={{ color: '#000000' }}>{title}</h3>
+        <p className="text-center text-sm text-gray-600 mb-6">Felsefe Dersi Sınavı</p>
+        <div className="space-y-4">
+            {questions.map((q, index) => (
+                <div key={index} className="flex py-2 border-b border-gray-300 last:border-b-0" style={{ pageBreakInside: 'avoid' }}>
+                    <div className="font-bold pr-2">{index + 1}.</div>
+                    <div className="flex-grow">
+                        <p style={{color: '#000000'}}>{q.question}</p>
+                        <div className="text-sm p-2 rounded mt-2" style={{ color: '#155724', backgroundColor: '#d4edda', border: '1px solid #c3e6cb' }}>
+                            <strong>Cevap:</strong> {q.answer}
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+);
+
+
 const ExamGenerator: React.FC<Props> = ({ grade, onBack }) => {
     const { units } = useUnitDatabase({ grade });
     const { files } = useDatabase({ grade });
@@ -45,7 +71,8 @@ const ExamGenerator: React.FC<Props> = ({ grade, onBack }) => {
     const [generatedQuestions, setGeneratedQuestions] = useState<Question[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isBankOpen, setIsBankOpen] = useState(false);
-    const printRef = useRef<HTMLDivElement>(null);
+    const [isProcessing, setIsProcessing] = useState(false);
+    const pdfContentRef = useRef<HTMLDivElement>(null);
 
 
     const outcomesForSelectedUnit = useMemo(() => {
@@ -72,62 +99,69 @@ const ExamGenerator: React.FC<Props> = ({ grade, onBack }) => {
         setIsBankOpen(false);
     };
     
-    const handlePrint = () => {
-        const printContent = printRef.current?.innerHTML;
-        if (!printContent) return;
+    const generatePdfOrPrint = async (action: 'save' | 'print') => {
+        if (!pdfContentRef.current || isProcessing) return;
+        setIsProcessing(true);
+        try {
+            const canvas = await html2canvas(pdfContentRef.current, { scale: 2 });
+            const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
+            
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const margin = 40;
+            const contentWidth = pdfWidth - margin * 2;
+            const contentHeight = (canvas.height * contentWidth) / canvas.width;
+            
+            let heightLeft = contentHeight;
+            let position = 0;
+            pdf.addImage(canvas, 'PNG', margin, margin, contentWidth, contentHeight);
+            heightLeft -= (pdf.internal.pageSize.getHeight() - 2 * margin);
 
-        const printWindow = window.open('', '_blank');
-        if (!printWindow) return;
+            while (heightLeft > 0) {
+                position -= (pdf.internal.pageSize.getHeight() - 2 * margin);
+                pdf.addPage();
+                pdf.addImage(canvas, 'PNG', margin, position + margin, contentWidth, contentHeight);
+                heightLeft -= (pdf.internal.pageSize.getHeight() - 2 * margin);
+            }
 
-        printWindow.document.write(`
-            <html>
-            <head>
-                <title>Sınav Çıktısı</title>
-                <style>
-                    body { font-family: sans-serif; margin: 2rem; }
-                    h3, p { text-align: center; }
-                    .question-item { display: flex; padding-top: 0.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid #e5e7eb; page-break-inside: avoid; }
-                    .question-num { font-weight: bold; padding-right: 0.5rem; }
-                    .question-content { flex-grow: 1; }
-                    .answer { font-size: 0.875rem; color: #166534; background-color: #f0fdf4; padding: 0.5rem; border-radius: 0.25rem; margin-top: 0.5rem; }
-                </style>
-            </head>
-            <body>
-                <h3>${units[selectedUnitIndex]?.unitName || 'Felsefe Sınavı'}</h3>
-                <p>Felsefe Dersi Sınavı</p>
-                <div style="margin-top: 2rem;">
-                    ${generatedQuestions.map((q, index) => `
-                        <div class="question-item">
-                            <div class="question-num">${index + 1}.</div>
-                            <div class="question-content">
-                                <p style="text-align: left;">${q.question}</p>
-                                <div class="answer"><strong>Cevap:</strong> ${q.answer}</div>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            </body>
-            </html>
-        `);
-        printWindow.document.close();
-        printWindow.focus();
-        setTimeout(() => {
-            printWindow.print();
-            printWindow.close();
-        }, 250);
+            if (action === 'save') {
+                pdf.save(`${(units[selectedUnitIndex]?.unitName || 'Sinav').replace(/ /g, '_')}_sinav.pdf`);
+            } else {
+                pdf.autoPrint();
+                window.open(pdf.output('bloburl'), '_blank');
+            }
+        } catch (error) {
+            console.error("PDF/Print generation failed:", error);
+        } finally {
+            setIsProcessing(false);
+        }
     };
     
     const renderResultComponent = (resultString: string) => {
+        const examTitle = units[selectedUnitIndex]?.unitName || 'Felsefe Sınavı';
         return (
             <div>
                  <div className="flex justify-between items-center mb-4">
                     <div>
                          <Button onClick={() => setGeneratedQuestions([])} variant="secondary" className="!text-xs !py-1 !px-2 bg-rose-800/50 hover:bg-rose-700/50">Listeyi Temizle</Button>
                     </div>
-                    <Button onClick={handlePrint} variant="secondary" disabled={generatedQuestions.length === 0}><PrinterIcon className="h-4 w-4 mr-2"/> Yazdır</Button>
+                    <div className="flex space-x-2">
+                        <Button onClick={() => generatePdfOrPrint('save')} variant="secondary" disabled={isProcessing || generatedQuestions.length === 0}>
+                            {isProcessing ? <Loader size="sm" /> : <DownloadIcon className="h-4 w-4 mr-2"/>} PDF İndir
+                        </Button>
+                        <Button onClick={() => generatePdfOrPrint('print')} variant="secondary" disabled={isProcessing || generatedQuestions.length === 0}>
+                            {isProcessing ? <Loader size="sm" /> : <PrinterIcon className="h-4 w-4 mr-2"/>} Yazdır
+                        </Button>
+                    </div>
                 </div>
-                 <div ref={printRef}>
-                    <PrintableExam questions={generatedQuestions} title={units[selectedUnitIndex]?.unitName || 'Felsefe Sınavı'} />
+                 
+                 {/* This is the displayed version for the user */}
+                 <PrintableExam questions={generatedQuestions} title={examTitle} />
+
+                 {/* This is the hidden version for PDF/print */}
+                 <div className="absolute top-0 -left-full -z-10">
+                    <div ref={pdfContentRef}>
+                         <PdfExamContent questions={generatedQuestions} title={examTitle} />
+                    </div>
                  </div>
             </div>
         );

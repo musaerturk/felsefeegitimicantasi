@@ -1,14 +1,10 @@
-
-
 import { GoogleGenAI, GenerateContentResponse, Type } from "@google/genai";
-import { StoredFile, UnitData, Question, Activity, ActivityCategory } from '../types';
-import { activityPoolData } from "../data/activityPoolData";
+import { StoredFile, UnitData, Question, Activity, ActivityCategory } from '../types.ts';
+import { activityPoolData } from "../data/activityPoolData.ts";
 
-// FIX: Switched to process.env.API_KEY to align with the provided guidelines for Gemini API usage. This resolves the TypeScript error with `import.meta.env` and ensures compliance.
 const API_KEY = process.env.API_KEY;
 
 if (!API_KEY) {
-  // FIX: Updated error message to be more generic and compliant with guidelines, which state not to instruct users on how to set the API key.
   throw new Error("API_KEY environment variable not set");
 }
 
@@ -31,7 +27,7 @@ const generateMultipartContent = async (prompt: string, files: StoredFile[]): Pr
             model: 'gemini-2.5-flash',
             contents: contents,
         });
-        return response.text;
+        return response.text ?? '';
     } catch (error) {
         console.error("Error generating content:", error);
         if (error instanceof Error) {
@@ -48,7 +44,7 @@ const generateSimpleContent = async (prompt: string): Promise<string> => {
             model: 'gemini-2.5-flash',
             contents: prompt,
         });
-        return response.text;
+        return response.text ?? '';
     } catch (error) {
         console.error("Error generating content:", error);
         if (error instanceof Error) {
@@ -58,6 +54,7 @@ const generateSimpleContent = async (prompt: string): Promise<string> => {
     }
 };
 
+// FIX: Add missing generateEvaluationForm function.
 export const generateEvaluationForm = async (formType: string, topic: string, criteria: string, scale: string): Promise<string> => {
     const criteriaPrompt = criteria ? `\n\nFormda özellikle şu kriterlere odaklan:\n- ${criteria.split('\n').join('\n- ')}` : '';
 
@@ -129,6 +126,7 @@ export const generateActivity = async ({ unitName, topic, outcome, activityType 
         });
 
         const jsonString = response.text;
+        if (!jsonString) return null;
         const parsedJson = JSON.parse(jsonString);
 
         if (typeof parsedJson === 'object' && parsedJson !== null && 'title' in parsedJson && 'steps' in parsedJson) {
@@ -245,6 +243,7 @@ Yukarıdaki bağlamı dikkate alarak, aşağıdaki iki bölüm için içerik olu
         });
 
         const jsonString = response.text;
+        if (!jsonString) return null;
         const parsedJson = JSON.parse(jsonString);
 
         if (typeof parsedJson === 'object' && parsedJson !== null && 'process' in parsedJson && 'evaluation' in parsedJson) {
@@ -267,6 +266,7 @@ export const generateExam = async (grade: number, outcomes: string[], count: num
     const prompt = `${fileReferencePrompt}${grade}. sınıf felsefe dersi için, aşağıdaki öğrenme çıktılarını kapsayan bir sınav hazırla:\n\n**Öğrenme Çıktıları:**\n- ${outcomeLabels}\n\n**Sınav İçeriği:**\n- Toplam ${count} adet "${type}" tipinde soru.\n\nÇıktıyı, her bir nesnenin 'question' (soru metni) ve 'answer' (cevap metni) anahtarlarına sahip olduğu bir JSON nesneleri dizisi olarak formatla. Eğer hiç soru üretemezsen, boş bir dizi döndür.`;
     
     try {
+        // FIX: The `files` variable was not defined, it should be `dbFiles` which is the function parameter.
         const fileParts = dbFiles.map(file => ({
             inlineData: {
                 data: file.content,
@@ -298,6 +298,7 @@ export const generateExam = async (grade: number, outcomes: string[], count: num
         });
         
         const jsonString = response.text;
+        if (!jsonString) return null;
         const parsedJson = JSON.parse(jsonString);
 
         if (Array.isArray(parsedJson)) {
@@ -350,11 +351,10 @@ export const extractQuestionsFromPdf = async (file: StoredFile): Promise<Questio
             },
         });
         
-        // The response text is already a JSON string because of the responseMimeType
         const jsonString = response.text;
+        if (!jsonString) return null;
         const parsedJson = JSON.parse(jsonString);
 
-        // Basic validation
         if (Array.isArray(parsedJson)) {
             return parsedJson.filter(
                 (item): item is Question => 
