@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { Classroom, Student } from '../types';
+import { Classroom, Student } from '../types.ts';
 
 const STORAGE_KEY = 'philosophy_classrooms';
 

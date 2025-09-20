@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { ExamAnalysisData, Classroom, ExamQuestion } from '../types';
+import { ExamAnalysisData, Classroom, ExamQuestion } from '../types.ts';
 
 const STORAGE_KEY_PREFIX = 'philosophy_exam_analysis_v2_';
 
