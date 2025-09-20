@@ -59,7 +59,6 @@ const App: React.FC = () => {
       case Tool.QUESTION_BANK:
         return <QuestionBank grade={selectedGrade} onBack={goBackToToolbox} />;
       case Tool.EXAM_ANALYSIS:
-        // FIX: Removed unused 'grade' prop to match the updated component props.
         return <ExamAnalyzer onBack={goBackToToolbox} />;
       case Tool.UNIT_DATABASE:
         return <UnitDatabase grade={selectedGrade} onBack={goBackToToolbox} />;
@@ -71,7 +70,6 @@ const App: React.FC = () => {
       case Tool.SINIFLARIM:
         return <ClassroomManager onBack={goBackToToolbox} />;
       case Tool.ETKINLIK_HAVUZU:
-        // FIX: Added the required 'grade' prop. This likely addresses the reported error which seems to have misidentified the component.
         return <ActivityPool grade={selectedGrade} onBack={goBackToToolbox} />;
       default:
         return <Toolbox onSelectTool={handleToolSelect} grade={selectedGrade} />;
