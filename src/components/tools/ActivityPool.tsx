@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Tool, Activity, ActivityCategory, Grade, activityCategories } from '../../types.ts';
+import { Tool, Activity, ActivityCategory, Grade, activityCategories, UnitData, UnitTopic } from '../../types.ts';
 import ToolViewWrapper from './ToolViewWrapper.tsx';
 import { useActivityPool } from '../../hooks/useActivityPool.ts';
 import Card from '../ui/Card.tsx';
@@ -115,12 +115,12 @@ const ActivityPool: React.FC<Props> = ({ grade, onBack }) => {
                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <FormField label="Ünite Seçin">
                                     <select value={selectedUnitIndex} onChange={e => setSelectedUnitIndex(parseInt(e.target.value, 10))} className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2">
-                                        {units.map((unit, index) => <option key={index} value={index}>{unit.unitName}</option>)}
+                                        {units.map((unit: UnitData, index: number) => <option key={index} value={index}>{unit.unitName}</option>)}
                                     </select>
                                 </FormField>
                                 <FormField label="Konu Seçin">
                                     <select value={selectedTopicIndex} onChange={e => setSelectedTopicIndex(parseInt(e.target.value, 10))} className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2" disabled={topics.length === 0}>
-                                        {topics.map((topic, index) => <option key={index} value={index}>{topic.name}</option>)}
+                                        {topics.map((topic: UnitTopic, index: number) => <option key={index} value={index}>{topic.name}</option>)}
                                     </select>
                                 </FormField>
                             </div>

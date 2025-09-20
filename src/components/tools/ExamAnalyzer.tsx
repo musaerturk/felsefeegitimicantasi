@@ -364,7 +364,7 @@ const ExamAnalyzer: React.FC<Props> = ({ onBack }) => {
         <div className="w-full animate-fade-in">
             <div className="flex items-center mb-6">
                 <Button onClick={onBack} variant="secondary" className="!p-2 mr-4">
-                    <svg xmlns="http://www.w.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
                 </Button>
                 <h2 className="text-3xl font-bold">{Tool.EXAM_ANALYSIS}</h2>
                  {selectedClass && <Button onClick={() => { if(window.confirm('Mevcut analizi sıfırlamak istediğinizden emin misiniz?')) { resetAnalysis(); setStep(2); } }} variant="secondary" className="ml-auto !text-xs !py-1 !px-2 bg-rose-800/50 hover:bg-rose-700/50">Analizi Sıfırla</Button>}
