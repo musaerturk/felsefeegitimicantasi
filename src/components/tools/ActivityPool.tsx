@@ -176,7 +176,7 @@ const ActivityPool: React.FC<Props> = ({ grade, onBack }) => {
                     </Card>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {activities.map(activity => (
+                        {activities.map((activity: Activity) => (
                             <Card key={activity.id} onClick={() => setSelectedActivity(activity)} className="cursor-pointer flex flex-col">
                                 <div className="flex items-start justify-between mb-3">
                                     <h3 className="text-xl font-semibold text-white flex-grow pr-2">{activity.title}</h3>

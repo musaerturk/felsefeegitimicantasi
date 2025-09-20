@@ -54,7 +54,6 @@ const generateSimpleContent = async (prompt: string): Promise<string> => {
     }
 };
 
-// FIX: Add missing generateEvaluationForm function.
 export const generateEvaluationForm = async (formType: string, topic: string, criteria: string, scale: string): Promise<string> => {
     const criteriaPrompt = criteria ? `\n\nFormda özellikle şu kriterlere odaklan:\n- ${criteria.split('\n').join('\n- ')}` : '';
 
@@ -145,7 +144,7 @@ export const generateLessonPlan = (grade: number, planData: UnitData, dbFiles: S
         ? `Ayrıca, ekteki referans dokümanlarını ('${dbFiles.map(f => f.name).join("', '")}') ana kaynak olarak kullanabilirsin.`
         : '';
 
-    const activityInspirationCategories = [...new Set(activityPoolData.map(a => a.category))];
+    const activityInspirationCategories = [...new Set(activityPoolData.map((a: Activity) => a.category))];
     const activityInspirationPrompt = `Bu adımları oluştururken, bir felsefe öğretmeninin kullanabileceği pratik ve ilgi çekici yöntemler öner. Örneğin, Etkinlik Havuzumuzda bulunan '${activityInspirationCategories.join("', '")}' gibi çeşitli etkinlik türlerinden ilham alabilirsin.`;
 
     const prompt = `
@@ -266,7 +265,6 @@ export const generateExam = async (grade: number, outcomes: string[], count: num
     const prompt = `${fileReferencePrompt}${grade}. sınıf felsefe dersi için, aşağıdaki öğrenme çıktılarını kapsayan bir sınav hazırla:\n\n**Öğrenme Çıktıları:**\n- ${outcomeLabels}\n\n**Sınav İçeriği:**\n- Toplam ${count} adet "${type}" tipinde soru.\n\nÇıktıyı, her bir nesnenin 'question' (soru metni) ve 'answer' (cevap metni) anahtarlarına sahip olduğu bir JSON nesneleri dizisi olarak formatla. Eğer hiç soru üretemezsen, boş bir dizi döndür.`;
     
     try {
-        // FIX: The `files` variable was not defined, it should be `dbFiles` which is the function parameter.
         const fileParts = dbFiles.map(file => ({
             inlineData: {
                 data: file.content,

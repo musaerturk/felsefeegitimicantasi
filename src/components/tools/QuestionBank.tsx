@@ -1,12 +1,12 @@
 import React, { useState, useCallback, useRef } from 'react';
-import { Grade, Tool, StoredFile, Question, QuestionType, questionTypes } from '../../types';
-import { extractQuestionsFromPdf } from '../../services/geminiService';
-import Button from '../ui/Button';
-import ToolViewWrapper from './ToolViewWrapper';
-import { useQuestionBank } from '../../hooks/useQuestionBank';
-import Accordion from '../ui/Accordion';
-import Card from '../ui/Card';
-import { useUnitDatabase } from '../../hooks/useUnitDatabase';
+import { Grade, Tool, StoredFile, Question, QuestionType, questionTypes } from '../../types.ts';
+import { extractQuestionsFromPdf } from '../../services/geminiService.ts';
+import Button from '../ui/Button.tsx';
+import ToolViewWrapper from './ToolViewWrapper.tsx';
+import { useQuestionBank } from '../../hooks/useQuestionBank.ts';
+import Accordion from '../ui/Accordion.tsx';
+import Card from '../ui/Card.tsx';
+import { useUnitDatabase } from '../../hooks/useUnitDatabase.ts';
 
 interface Props {
   grade: Grade;
@@ -150,7 +150,7 @@ const QuestionBank: React.FC<Props> = ({ grade, onBack }) => {
                                 return (
                                 <Accordion key={type} title={`${questionType} (${currentQuestions.length} Soru)`} isSubAccordion isOpen={!!openAccordions[accordionId]} onToggle={() => toggleAccordion(accordionId)}>
                                     <div className="space-y-4">
-                                        {currentQuestions.map((q, index) => (
+                                        {currentQuestions.map((q: Question, index: number) => (
                                             <div key={index} className="p-3 bg-gray-800/50 rounded-md border border-gray-700/50">
                                                 <p className="font-semibold text-gray-200 mb-2">{index + 1}. {q.question}</p>
                                                 <div className="mt-2">
