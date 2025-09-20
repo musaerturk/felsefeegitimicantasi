@@ -1,0 +1,73 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="grad1" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+      <stop offset="85%" style="stop-color:white"/>
+      <stop offset="100%" style="stop-color:#E0E0E0"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <circle cx="100" cy="100" r="100" fill="url(#grad1)"/>
+
+  <circle cx="100" cy="100" r="75" fill="#1C2B5B"/>
+
+  <g fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round">
+    
+    <!-- Columns -->
+    <g stroke-width="2.5">
+      <!-- Left Column -->
+      <path d="M 60 125 v -40"/>
+      <path d="M 55 128 h 10"/>
+      <path d="M 55 125 h 10"/>
+      <path d="M 54 85 h 12"/>
+      <path d="M 56 82.5 c -1 -4 3 -4 4 0 c 1 4 -3 4 -4 0 z m 4 0 c 1 -4 5 -4 4 0 c -1 4 -5 4 -4 0 z"/>
+
+      <!-- Right Column -->
+      <path d="M 140 125 v -40"/>
+      <path d="M 135 128 h 10"/>
+      <path d="M 135 125 h 10"/>
+      <path d="M 134 85 h 12"/>
+      <path d="M 136 82.5 c -1 -4 3 -4 4 0 c 1 4 -3 4 -4 0 z m 4 0 c 1 -4 5 -4 4 0 c -1 4 -5 4 -4 0 z"/>
+    </g>
+
+    <!-- Philosopher -->
+    <g stroke-width="3">
+      <!-- Head -->
+      <path d="M 118 78 c -5 -10 -20 -12 -30 -5"/>
+      <!-- Beard -->
+      <path d="M 108 85 q -5 10 -10 15 q -5 5 -2 10"/>
+      <path d="M 88 73 c -5 10 -3 20 5 27"/>
+      <!-- Toga -->
+      <path d="M 86 85 l -10 40"/>
+      <path d="M 110 115 c 10 -10 10 -25 0 -30"/>
+      <path d="M 82 100 h 30"/>
+      
+      <!-- Hands and Tablet -->
+      <path d="M 110 115 l 5 5"/>
+      <path d="M 98 120 l 10 -10"/>
+      
+      <g transform="translate(10, 2)">
+          <rect x="108" y="98" width="24" height="32" rx="3" ry="3" stroke-width="2"/>
+          
+          <!-- glow effect -->
+          <rect x="108" y="98" width="24" height="32" rx="3" ry="3" stroke="white" stroke-opacity="0.7" filter="url(#glow)" />
+
+          <!-- flowchart -->
+          <g stroke-width="1.5">
+              <rect x="116" y="103" width="8" height="5"/>
+              <line x1="120" y1="108" x2="120" y2="111"/>
+              <rect x="112" y="111" width="6" height="4"/>
+              <rect x="122" y="111" width="6" height="4"/>
+              <line x1="115" y1="115" x2="115" y2="118"/>
+              <rect x="112" y="118" width="6" height="4"/>
+          </g>
+      </g>
+    </g>
+  </g>
+</svg>
