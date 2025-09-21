@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { Classroom, Checklist, ChecklistData, ChecklistState } from '../types.ts';
+import { Classroom, Checklist, ChecklistData, ChecklistState } from '../types';
 
 const STORAGE_KEY_PREFIX = 'philosophy_checklists_data_';
 const CUSTOM_CHECKLISTS_KEY = 'philosophy_custom_checklists_v2';

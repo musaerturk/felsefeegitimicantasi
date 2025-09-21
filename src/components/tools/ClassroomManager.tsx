@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Tool, Classroom, Student } from '../../types.ts';
-import Button from '../ui/Button.tsx';
-import Card from '../ui/Card.tsx';
-import { useClassroomManager } from '../../hooks/useClassroomManager.ts';
+import { Tool } from '../../types';
+import Button from '../ui/Button';
+import Card from '../ui/Card';
+import { useClassroomManager } from '../../hooks/useClassroomManager';
 
 interface Props {
     onBack: () => void;
@@ -34,7 +34,7 @@ const ClassroomManager: React.FC<Props> = ({ onBack }) => {
         }
     };
 
-    const selectedClass = classrooms.find((c: Classroom) => c.id === selectedClassId);
+    const selectedClass = classrooms.find(c => c.id === selectedClassId);
 
     return (
         <div className="w-full animate-fade-in">
@@ -50,7 +50,7 @@ const ClassroomManager: React.FC<Props> = ({ onBack }) => {
                 <Card>
                     <h3 className="text-xl font-semibold mb-4 text-indigo-400">Sınıflar ({classrooms.length})</h3>
                     <div className="space-y-2 mb-4 max-h-60 overflow-y-auto pr-2">
-                        {classrooms.map((classroom: Classroom) => (
+                        {classrooms.map(classroom => (
                             <div
                                 key={classroom.id}
                                 onClick={() => setSelectedClassId(classroom.id)}
@@ -63,7 +63,7 @@ const ClassroomManager: React.FC<Props> = ({ onBack }) => {
                                         if (window.confirm(`'${classroom.name}' sınıfını silmek istediğinizden emin misiniz? Bu sınıfa ait tüm performans verileri de silinecektir.`)) {
                                             deleteClassroom(classroom.id);
                                             if (selectedClassId === classroom.id) {
-                                                setSelectedClassId(classrooms.length > 1 ? classrooms.find((c: Classroom) => c.id !== classroom.id)!.id : null);
+                                                setSelectedClassId(classrooms.length > 1 ? classrooms.find(c => c.id !== classroom.id)!.id : null);
                                             }
                                         }
                                     }}
@@ -89,7 +89,7 @@ const ClassroomManager: React.FC<Props> = ({ onBack }) => {
                     {selectedClassId && selectedClass ? (
                         <>
                             <div className="space-y-2 mb-4 max-h-60 overflow-y-auto pr-2">
-                               {selectedClass.students.map((student: Student) => (
+                               {selectedClass.students.map(student => (
                                     <div key={student.id} className="p-3 bg-gray-700/50 rounded-md flex justify-between items-center">
                                        <span>{student.name}</span>
                                        <button onClick={() => deleteStudent(selectedClass.id, student.id)} className="text-rose-400 hover:text-rose-300 font-bold text-xl flex-shrink-0">&times;</button>

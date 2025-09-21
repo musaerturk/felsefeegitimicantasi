@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
-import { Grade } from '../types.ts';
-import { AgendaWeek, getInitialAgendaData } from '../data/agendaData.ts';
+import { Grade } from '../types';
+import { AgendaWeek, getInitialAgendaData } from '../data/agendaData';
 
 const STORAGE_KEY_PREFIX = 'philosophy_agenda_data_';
 
