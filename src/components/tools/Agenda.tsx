@@ -37,7 +37,7 @@ const useCalendarNotes = ({ grade }: { grade: Grade }) => {
       saveData(newNotes);
       return newNotes;
     });
-  }, [storageKey]);
+  }, []);
   
   const getNote = useCallback((dateKey: string): CalendarNote => {
       return notes[dateKey] || { text: '', reminder: false };
