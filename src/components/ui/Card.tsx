@@ -1,7 +1,17 @@
 ﻿import React from 'react';
 
-const Card = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
-  <div className={`card ${className}`}>
+interface CardProps {
+  children: React.ReactNode;
+  className?: string;
+  onClick?: () => void;
+}
+
+const Card = ({ children, className = '', onClick }: CardProps) => (
+  <div 
+    className={`card ${className}`}
+    onClick={onClick}
+    style={onClick ? { cursor: 'pointer' } : {}}
+  >
     {children}
   </div>
 );

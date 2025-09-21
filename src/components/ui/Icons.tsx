@@ -1,34 +1,39 @@
 ﻿import React from 'react';
 
-// Tüm ikonları ekle
-export const LogoIcon = () => <span>🏫</span>;
-export const CalendarIcon = () => <span>📅</span>;
-export const BookIcon = () => <span>📚</span>;
-export const DocumentTextIcon = () => <span>📝</span>;
-export const LightBulbIcon = () => <span>💡</span>;
-export const ChartBarIcon = () => <span>📊</span>;
-export const CheckBadgeIcon = () => <span>✅</span>;
-export const UsersIcon = () => <span>👥</span>;
-export const SparklesIcon = () => <span>✨</span>;
-export const AcademicCapIcon = () => <span>🎓</span>;
-export const PrinterIcon = () => <span>🖨️</span>;
-export const ClipboardDocumentIcon = () => <span>📋</span>;
-export const DocumentPlusIcon = () => <span>📄</span>;
-export const ChevronDownIcon = () => <span>⬇️</span>;
-export const PlusIcon = () => <span>➕</span>;
-export const TrashIcon = () => <span>🗑️</span>;
-export const EditIcon = () => <span>✏️</span>;
-export const SaveIcon = () => <span>💾</span>;
-export const LoaderIcon = () => <span>⏳</span>;
-export const CrossIcon = () => <span>❌</span>;
-export const ArrowRightIcon = () => <span>→</span>;
-export const ArrowLeftIcon = () => <span>←</span>;
-export const DownloadIcon = () => <span>📥</span>;
-export const UploadIcon = () => <span>📤</span>;
-export const SearchIcon = () => <span>🔍</span>;
-export const FilterIcon = () => <span>⚡</span>;
+interface IconProps {
+  className?: string;
+}
 
-// Named export olarak da ekle
+// Tüm ikonları className prop'u alacak şekilde güncelle
+export const LogoIcon = ({ className = '' }: IconProps) => <span className={className}>🏫</span>;
+export const CalendarIcon = ({ className = '' }: IconProps) => <span className={className}>📅</span>;
+export const BookIcon = ({ className = '' }: IconProps) => <span className={className}>📚</span>;
+export const DocumentTextIcon = ({ className = '' }: IconProps) => <span className={className}>📝</span>;
+export const LightBulbIcon = ({ className = '' }: IconProps) => <span className={className}>💡</span>;
+export const ChartBarIcon = ({ className = '' }: IconProps) => <span className={className}>📊</span>;
+export const CheckBadgeIcon = ({ className = '' }: IconProps) => <span className={className}>✅</span>;
+export const UsersIcon = ({ className = '' }: IconProps) => <span className={className}>👥</span>;
+export const SparklesIcon = ({ className = '' }: IconProps) => <span className={className}>✨</span>;
+export const AcademicCapIcon = ({ className = '' }: IconProps) => <span className={className}>🎓</span>;
+export const PrinterIcon = ({ className = '' }: IconProps) => <span className={className}>🖨️</span>;
+export const ClipboardDocumentIcon = ({ className = '' }: IconProps) => <span className={className}>📋</span>;
+export const ClipboardDocumentCheckIcon = ({ className = '' }: IconProps) => <span className={className}>📋✅</span>;
+export const DocumentPlusIcon = ({ className = '' }: IconProps) => <span className={className}>📄</span>;
+export const ChevronDownIcon = ({ className = '' }: IconProps) => <span className={className}>⬇️</span>;
+export const PlusIcon = ({ className = '' }: IconProps) => <span className={className}>➕</span>;
+export const TrashIcon = ({ className = '' }: IconProps) => <span className={className}>🗑️</span>;
+export const EditIcon = ({ className = '' }: IconProps) => <span className={className}>✏️</span>;
+export const SaveIcon = ({ className = '' }: IconProps) => <span className={className}>💾</span>;
+export const LoaderIcon = ({ className = '' }: IconProps) => <span className={className}>⏳</span>;
+export const CrossIcon = ({ className = '' }: IconProps) => <span className={className}>❌</span>;
+export const ArrowRightIcon = ({ className = '' }: IconProps) => <span className={className}>→</span>;
+export const ArrowLeftIcon = ({ className = '' }: IconProps) => <span className={className}>←</span>;
+export const DownloadIcon = ({ className = '' }: IconProps) => <span className={className}>📥</span>;
+export const UploadIcon = ({ className = '' }: IconProps) => <span className={className}>📤</span>;
+export const SearchIcon = ({ className = '' }: IconProps) => <span className={className}>🔍</span>;
+export const FilterIcon = ({ className = '' }: IconProps) => <span className={className}>⚡</span>;
+
+// Named export olarak da ekle (Icons object'i için)
 export const Icons = {
   Logo: LogoIcon,
   Calendar: CalendarIcon,
@@ -42,6 +47,7 @@ export const Icons = {
   AcademicCap: AcademicCapIcon,
   Printer: PrinterIcon,
   ClipboardDocument: ClipboardDocumentIcon,
+  ClipboardDocumentCheck: ClipboardDocumentCheckIcon,
   DocumentPlus: DocumentPlusIcon,
   ChevronDown: ChevronDownIcon,
   Plus: PlusIcon,
