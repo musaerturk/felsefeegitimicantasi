@@ -19,7 +19,7 @@ const ExamAnalyzer: React.FC<Props> = ({ onBack }) => {
     const { classrooms } = useClassroomManager();
     const [selectedClass, setSelectedClass] = useState<Classroom | null>(null);
     const [step, setStep] = useState(1); // 1: Select Class, 2: Define Exam, 3: Enter Scores, 4: View Report
-    const { analysisData, updateExamTitle, updateQuestions, updateStudentScore, resetAnalysis } = useExamAnalysisData(selectedClass);
+    const { analysisData, updateExamTitle, updateQuestions, updateStudentScore, resetAnalysis } = useExamAnalysisData(selectedClass?.id);
     const [isProcessing, setIsProcessing] = useState(false);
     const reportRef = useRef<HTMLDivElement>(null);
     
