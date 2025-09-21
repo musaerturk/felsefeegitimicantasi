@@ -1,5 +1,9 @@
-﻿// useClassroomManager hook
-export const useClassroomManager = () => {
-  // Sınıf yönetimi hook implementasyonu
-  return {};
+﻿export const useClassroomManager = () => {
+  return {
+    classrooms: [],
+    addClassroom: () => {},
+    deleteClassroom: () => {},
+    addStudent: () => {},
+    deleteStudent: () => {},
+  };
 };

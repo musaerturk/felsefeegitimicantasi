@@ -1,4 +1,9 @@
-﻿// unitDatabaseOptions
-export const unitDatabaseOptions = {
-  // Veritabanı seçeneklerini buraya ekleyin
-};
+﻿export const allGrades = ['9', '10', '11', '12'];
+export const allUnits = ['Unit1', 'Unit2', 'Unit3', 'Unit4'];
+export const allTopics = ['Topic1', 'Topic2', 'Topic3'];
+export const allConcepts = ['Concept1', 'Concept2'];
+export const allObjectives = ['Objective1', 'Objective2'];
+export const allActivities = ['Activity1', 'Activity2'];
+export const allResources = ['Resource1', 'Resource2'];
+export const allAssessments = ['Assessment1', 'Assessment2'];
+export const allKeywords = ['Keyword1', 'Keyword2'];

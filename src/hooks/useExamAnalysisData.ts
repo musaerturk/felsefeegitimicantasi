@@ -1,5 +1,9 @@
-﻿// useExamAnalysisData hook
-export const useExamAnalysisData = () => {
-  // Sınav analiz verileri hook implementasyonu
-  return {};
+﻿export const useExamAnalysisData = () => {
+  return {
+    analysisData: {},
+    updateExamTitle: () => {},
+    updateQuestions: () => {},
+    updateStudentScore: () => {},
+    resetAnalysis: () => {},
+  };
 };
