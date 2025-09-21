@@ -47,7 +47,7 @@ const CheckboxTree: React.FC<{
                         <span className="text-gray-300">{node.label}</span>
                     </label>
                 </div>
-                {isOpen && hasChildren && node.children?.map(...) || []}
+                {{{isOpen && hasChildren && node.children?.map(child => renderNode(child, level + 1))}}
             </div>
         );
     };
