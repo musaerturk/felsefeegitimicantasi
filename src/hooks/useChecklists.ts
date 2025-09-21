@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { Classroom, Checklist, ChecklistData, ChecklistState } from '../types';
+import { Classroom, Checklist, ChecklistData, ChecklistState } from '../types.ts';
 
 const STORAGE_KEY_PREFIX = 'philosophy_checklists_data_';
 const CUSTOM_CHECKLISTS_KEY = 'philosophy_custom_checklists_v2';
@@ -98,7 +98,7 @@ export const useChecklists = (classroom: Classroom | null) => {
         const newChecklist: Checklist = {
             id: `custom_${crypto.randomUUID()}`,
             title,
-            items: items.map((text, i) => ({ id: `item_${crypto.randomUUID()}`, text })),
+            items: items.map((text) => ({ id: `item_${crypto.randomUUID()}`, text })),
             isCustom: true,
         };
         saveCustomChecklists([...customChecklists, newChecklist]);
