@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { Grade, Tool, UnitData, UnitTopic } from '../../types';
+import { Grade, Tool, UnitData } from '../../types';
 import ToolViewWrapper from './ToolViewWrapper';
 import { useUnitDatabase } from '../../hooks/useUnitDatabase';
 import Accordion from '../ui/Accordion';
@@ -24,20 +24,19 @@ interface Props {
 }
 
 const outcomeMap11 = new Map<string, string>();
-ogrenmeCiktilariOptions11.forEach((unit: OptionNode) => {
+ogrenmeCiktilariOptions11.forEach(unit => {
     if (unit.children) {
-        unit.children.forEach((outcome: OptionNode) => {
+        unit.children.forEach(outcome => {
             outcomeMap11.set(outcome.id + '.', outcome.label);
-            outcomeMap11.set(outcome.id.replace(/\./g, '') + '.', outcome.label);
+            // Handle variations like "11.1.1." vs "1111."
+            outcomeMap11.set(outcome.id.replace(/\./g, '') + '.', outcome.label); 
         });
     }
 });
 
 const getFullOutcomes11 = (outcomeCodes: string[]): string[] => {
     return outcomeCodes.map(code => {
-        const cleanCode = code.replace(/ /g, '').endsWith('.') 
-            ? code.replace(/ /g, '') 
-            : code.replace(/ /g, '') + '.';
+        const cleanCode = code.replace(/ /g, '').endsWith('.') ? code.replace(/ /g, '') : code.replace(/ /g, '') + '.';
         return outcomeMap11.get(cleanCode) || code;
     });
 };
@@ -172,7 +171,7 @@ const UnitDatabase: React.FC<Props> = ({ grade, onBack }) => {
                 />
             )}
             <div className="flex border-b border-gray-700 mb-4 overflow-x-auto">
-                {units.map((unit: UnitData, index: number) => (
+                {units.map((_, index) => (
                     <button
                         key={index}
                         onClick={() => setActiveUnitIndex(index)}
@@ -214,4 +213,3 @@ const UnitDatabase: React.FC<Props> = ({ grade, onBack }) => {
 };
 
 export default UnitDatabase;
-

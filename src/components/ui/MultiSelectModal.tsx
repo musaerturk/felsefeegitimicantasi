@@ -1,88 +1,107 @@
-import React, { useState, useEffect } from 'react';
-
-// Assuming these types are defined elsewhere in your project
-interface Option {
-  value: string;
-  label: string;
-}
+import React, { useState, useCallback } from 'react';
+import Button from './Button';
+import { OptionNode } from '../../data/unitDatabaseOptions';
+import { ChevronDownIcon } from './Icons';
 
 interface MultiSelectModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  options: Option[];
-  selectedValues: string[];
-  onChange: (selected: string[]) => void;
   title: string;
+  options: OptionNode[];
+  initialSelected: string[];
+  onClose: () => void;
+  onSave: (selected: string[]) => void;
 }
 
-const MultiSelectModal: React.FC<MultiSelectModalProps> = ({
-  isOpen,
-  onClose,
-  options,
-  selectedValues,
-  onChange,
-  title,
-}) => {
-  const [currentSelection, setCurrentSelection] = useState<string[]>(selectedValues);
+const CheckboxTree: React.FC<{
+    nodes: OptionNode[];
+    selected: Set<string>;
+    onToggle: (id: string, children?: OptionNode[]) => void;
+}> = ({ nodes, selected, onToggle }) => {
+    const [openNodes, setOpenNodes] = useState<Record<string, boolean>>({});
 
-  useEffect(() => {
-    setCurrentSelection(selectedValues);
-  }, [selectedValues, isOpen]);
+    const handleToggleNode = (id: string) => {
+        setOpenNodes(prev => ({ ...prev, [id]: !prev[id] }));
+    }
 
-  if (!isOpen) {
-    return null;
-  }
+    const renderNode = (node: OptionNode, level = 0) => {
+        const isSelected = selected.has(node.id);
+        const hasChildren = node.children && node.children.length > 0;
+        const isOpen = hasChildren && openNodes[node.id];
 
-  const handleToggle = (value: string) => {
-    setCurrentSelection((prev) =>
-      prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
-    );
-  };
+        return (
+            <div key={node.id} style={{ marginLeft: `${level * 20}px` }}>
+                <div className="flex items-center space-x-2 my-1">
+                    {hasChildren && (
+                        <button onClick={() => handleToggleNode(node.id)} className="p-1 rounded-full hover:bg-gray-700">
+                             <ChevronDownIcon className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                        </button>
+                    )}
+                    {!hasChildren && <div className="w-6" />}
+                    
+                    <label className="flex items-center space-x-2 cursor-pointer flex-grow">
+                        <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() => onToggle(node.id, node.children)}
+                            className="form-checkbox h-4 w-4 bg-gray-700 border-gray-600 text-indigo-500 focus:ring-indigo-500 rounded"
+                        />
+                        <span className="text-gray-300">{node.label}</span>
+                    </label>
+                </div>
+                {isOpen && hasChildren && node.children.map(child => renderNode(child, level + 1))}
+            </div>
+        );
+    };
 
-  const handleConfirm = () => {
-    onChange(currentSelection);
-    onClose();
-  };
+    return <>{nodes.map(node => renderNode(node))}</>;
+};
+
+
+const MultiSelectModal: React.FC<MultiSelectModalProps> = ({ title, options, initialSelected, onClose, onSave }) => {
+  const [selected, setSelected] = useState(new Set(initialSelected));
+
+  const handleToggle = useCallback((id: string, children?: OptionNode[]) => {
+    const newSelected = new Set(selected);
+    const descendantIds = children ? getAllDescendantIds(children) : [];
+    
+    if (newSelected.has(id)) {
+        newSelected.delete(id);
+        descendantIds.forEach(childId => newSelected.delete(childId));
+    } else {
+        newSelected.add(id);
+        descendantIds.forEach(childId => newSelected.add(childId));
+    }
+    
+    setSelected(newSelected);
+  }, [selected]);
   
-  const handleCancel = () => {
-    onClose();
+  const getAllDescendantIds = (nodes: OptionNode[]): string[] => {
+      let ids: string[] = [];
+      for (const node of nodes) {
+          ids.push(node.id);
+          if (node.children) {
+              ids = [...ids, ...getAllDescendantIds(node.children)];
+          }
+      }
+      return ids;
   };
 
-  // The error is a TypeScript type mismatch. By explicitly typing this object
-  // with React.CSSProperties, we ensure the 'position' property's type is
-  // correctly interpreted as 'fixed' and not a generic 'string'.
-  const modalStyles: React.CSSProperties = { zIndex: 1000, position: 'fixed', top: 0, left: 0 };
+  const handleSave = () => {
+    onSave(Array.from(selected));
+  };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" style={modalStyles}>
-      <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
-        <h2 className="text-xl font-semibold mb-4">{title}</h2>
-        <div className="space-y-2 max-h-60 overflow-y-auto">
-          {options.map((option) => (
-            <label key={option.value} className="flex items-center space-x-3 p-2 rounded-md hover:bg-gray-100 cursor-pointer">
-              <input
-                type="checkbox"
-                className="h-5 w-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                checked={currentSelection.includes(option.value)}
-                onChange={() => handleToggle(option.value)}
-              />
-              <span>{option.label}</span>
-            </label>
-          ))}
+    <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 animate-fade-in">
+      <div className="bg-gray-800 rounded-lg shadow-xl w-full max-w-lg max-h-[80vh] flex flex-col border border-gray-700">
+        <div className="flex justify-between items-center p-4 border-b border-gray-700">
+          <h2 className="text-xl font-bold text-indigo-400">{title}</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-white">&times;</button>
         </div>
-        <div className="mt-6 flex justify-end space-x-3">
-          <button
-            onClick={handleCancel}
-            className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleConfirm}
-            className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Confirm
-          </button>
+        <div className="p-4 overflow-y-auto flex-grow">
+           <CheckboxTree nodes={options} selected={selected} onToggle={handleToggle} />
+        </div>
+        <div className="flex justify-end p-4 border-t border-gray-700 space-x-2">
+          <Button onClick={onClose} variant="secondary">İptal</Button>
+          <Button onClick={handleSave}>Kaydet</Button>
         </div>
       </div>
     </div>

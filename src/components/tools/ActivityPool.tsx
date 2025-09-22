@@ -9,7 +9,8 @@ import { useUnitDatabase } from '../../hooks/useUnitDatabase.ts';
 import { generateActivity } from '../../services/geminiService.ts';
 import Button from '../ui/Button.tsx';
 import Loader from '../ui/Loader.tsx';
-import { ogrenmeCiktilariOptions11, OptionNode } from '../../data/unitDatabaseOptions.ts';
+// FIX: Changed import from the non-existent 'OptionNode' to the correct 'Option' interface.
+import { ogrenmeCiktilariOptions11, Option } from '../../data/unitDatabaseOptions.ts';
 
 interface Props {
   onBack: () => void;
@@ -17,11 +18,12 @@ interface Props {
 }
 
 const outcomeMap11 = new Map<string, string>();
-ogrenmeCiktilariOptions11.forEach((unit: OptionNode) => {
+// FIX: Updated type from 'OptionNode' to 'Option' and property access from '.id' to '.value'.
+ogrenmeCiktilariOptions11.forEach((unit: Option) => {
     if (unit.children) {
-        unit.children.forEach((outcome: OptionNode) => {
-            outcomeMap11.set(outcome.id + '.', outcome.label);
-            outcomeMap11.set(outcome.id.replace(/\./g, '') + '.', outcome.label); 
+        unit.children.forEach((outcome: Option) => {
+            outcomeMap11.set(outcome.value + '.', outcome.label);
+            outcomeMap11.set(outcome.value.replace(/\./g, '') + '.', outcome.label); 
         });
     }
 });
