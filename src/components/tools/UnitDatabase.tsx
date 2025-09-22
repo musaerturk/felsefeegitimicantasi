@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { Grade, Tool, UnitData, UnitTopic } from '../../types.ts';
-import ToolViewWrapper from './ToolViewWrapper.tsx';
-import { useUnitDatabase } from '../../hooks/useUnitDatabase.ts';
-import Accordion from '../ui/Accordion.tsx';
-import Button from '../ui/Button.tsx';
-import MultiSelectModal from '../ui/MultiSelectModal.tsx';
+import { Grade, Tool, UnitData, UnitTopic } from '../../types';
+import ToolViewWrapper from './ToolViewWrapper';
+import { useUnitDatabase } from '../../hooks/useUnitDatabase';
+import Accordion from '../ui/Accordion';
+import Button from '../ui/Button';
+import MultiSelectModal from '../ui/MultiSelectModal';
 import { 
     alanBecerileriOptions, 
     egilimlerOptions, 
@@ -15,8 +15,8 @@ import {
     ogrenmeCiktilariOptions11,
     kavramsalBecerilerOptions,
     OptionNode 
-} from '../../data/unitDatabaseOptions.ts';
-import Card from '../ui/Card.tsx';
+} from '../../data/unitDatabaseOptions';
+import Card from '../ui/Card';
 
 interface Props {
   grade: Grade;
@@ -28,15 +28,16 @@ ogrenmeCiktilariOptions11.forEach((unit: OptionNode) => {
     if (unit.children) {
         unit.children.forEach((outcome: OptionNode) => {
             outcomeMap11.set(outcome.id + '.', outcome.label);
-            // Handle variations like "11.1.1." vs "1111."
-            outcomeMap11.set(outcome.id.replace(/\./g, '') + '.', outcome.label); 
+            outcomeMap11.set(outcome.id.replace(/\./g, '') + '.', outcome.label);
         });
     }
 });
 
 const getFullOutcomes11 = (outcomeCodes: string[]): string[] => {
     return outcomeCodes.map(code => {
-        const cleanCode = code.replace(/ /g, '').endsWith('.') ? code.replace(/ /g, '') : code.replace(/ /g, '') + '.';
+        const cleanCode = code.replace(/ /g, '').endsWith('.') 
+            ? code.replace(/ /g, '') 
+            : code.replace(/ /g, '') + '.';
         return outcomeMap11.get(cleanCode) || code;
     });
 };
@@ -213,3 +214,4 @@ const UnitDatabase: React.FC<Props> = ({ grade, onBack }) => {
 };
 
 export default UnitDatabase;
+
