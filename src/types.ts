@@ -1,5 +1,3 @@
-
-
 export enum Grade {
   TENTH = 10,
   ELEVENTH = 11,
@@ -152,7 +150,6 @@ export interface CalendarNote {
     reminder: boolean;
 }
 
-// FIX: Added missing PerformanceData and StudentPerformance types.
 export interface StudentPerformance {
     studentId: string;
     studentName: string;
