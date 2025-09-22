@@ -48,13 +48,10 @@ const MultiSelectModal: React.FC<MultiSelectModalProps> = ({
     onClose();
   };
 
-  // The error was likely on the line below.
-  // A common mistake is a missing comma between properties in an object,
-  // for example: { propA: 'valueA' propB: 'valueB' }
-  // I am assuming a hypothetical object creation here for demonstration,
-  // as I don't have your original code.
-  // The FIX is ensuring correct object syntax. For example, adding a comma.
-  const modalStyles = { zIndex: 1000, position: 'fixed', top: 0, left: 0 };
+  // The error is a TypeScript type mismatch. By explicitly typing this object
+  // with React.CSSProperties, we ensure the 'position' property's type is
+  // correctly interpreted as 'fixed' and not a generic 'string'.
+  const modalStyles: React.CSSProperties = { zIndex: 1000, position: 'fixed', top: 0, left: 0 };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" style={modalStyles}>
