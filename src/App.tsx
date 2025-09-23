@@ -14,11 +14,14 @@ import ClassroomManager from './components/tools/ClassroomManager.tsx';
 import ActivityPool from './components/tools/ActivityPool.tsx';
 import EvaluationScales from './components/tools/EvaluationScales.tsx';
 import { LogoIcon } from './components/ui/Icons.tsx';
+import PrivacyPolicy from './components/PrivacyPolicy.tsx';
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedGrade, setSelectedGrade] = useState<Grade | null>(null);
   const [activeTool, setActiveTool] = useState<Tool | null>(null);
+  const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
+
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -83,6 +86,8 @@ const App: React.FC = () => {
             <div className="flex-grow flex items-center justify-center animate-fade-in">
               <LogoIcon className="h-48 w-48 text-indigo-400" />
             </div>
+          ) : showPrivacyPolicy ? (
+            <PrivacyPolicy onBack={() => setShowPrivacyPolicy(false)} />
           ) : (
             <>
               <Header 
@@ -102,6 +107,12 @@ const App: React.FC = () => {
               </main>
               <footer className="text-center p-4 text-gray-500 text-sm">
                 Felsefe Eğitimi Çantası © 2024
+                 <button 
+                    onClick={() => setShowPrivacyPolicy(true)} 
+                    className="ml-4 text-indigo-400 hover:text-indigo-300 underline"
+                  >
+                    Gizlilik Politikası
+                  </button>
               </footer>
             </>
         )}

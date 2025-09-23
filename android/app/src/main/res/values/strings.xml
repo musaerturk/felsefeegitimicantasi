@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">felsefe eğitimi çantası</string>
+    <string name="title_activity_main">felsefe eğitimi çantası</string>
+    <string name="package_name">ogretmenuygulama.com</string>
+    <string name="custom_url_scheme">ogretmenuygulama.com</string>
+</resources>
