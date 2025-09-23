@@ -1,9 +1,7 @@
-
-
 import React, { useState, useCallback } from 'react';
-import Button from './Button';
-import { Option } from '../../data/unitDatabaseOptions';
-import { ChevronDownIcon } from './Icons';
+import Button from './Button.tsx';
+import { Option } from '../../data/unitDatabaseOptions.ts';
+import { ChevronDownIcon } from './Icons.tsx';
 
 interface MultiSelectModalProps {
   title: string;
@@ -49,7 +47,7 @@ const CheckboxTree: React.FC<{
                         <span className="text-gray-300">{node.label}</span>
                     </label>
                 </div>
-                {isOpen && hasChildren && node.children.map((child: Option) => renderNode(child, level + 1))}
+                {isOpen && hasChildren && node.children && node.children.map((child: Option) => renderNode(child, level + 1))}
             </div>
         );
     };
