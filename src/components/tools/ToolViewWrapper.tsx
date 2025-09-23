@@ -1,9 +1,8 @@
 import React from 'react';
-import Button from '../ui/Button';
-import Card from '../ui/Card';
-import Loader from '../ui/Loader';
-import { Tool } from '../../types';
-
+import Button from '../ui/Button.tsx';
+import Card from '../ui/Card.tsx';
+import Loader from '../ui/Loader.tsx';
+import { Tool } from '../../types.ts';
 
 interface ToolViewWrapperProps {
   toolName: Tool;

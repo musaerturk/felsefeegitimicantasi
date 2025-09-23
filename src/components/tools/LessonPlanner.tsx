@@ -1,14 +1,14 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { Grade, Tool, StoredFile, UnitData } from '../../types';
-import { generateLessonPlan, generateLessonPlanGrade11 } from '../../services/geminiService';
-import Button from '../ui/Button';
-import ToolViewWrapper from './ToolViewWrapper';
-import { useDatabase } from '../../hooks/useDatabase';
-import { useUnitDatabase } from '../../hooks/useUnitDatabase';
-import PlanOutput from '../ui/PlanOutput';
-import { ogrenmeCiktilariOptions10, ogrenmeCiktilariOptions11, alanBecerileriOptions, kavramsalBecerilerOptions, egilimlerOptions, sosyalDuygusalOptions, degerlerOptions, okuryazarlikOptions, OptionNode } from '../../data/unitDatabaseOptions';
-import Accordion from '../ui/Accordion';
-import MultiSelectModal from '../ui/MultiSelectModal';
+import { Grade, Tool, StoredFile, UnitData } from '../../types.ts';
+import { generateLessonPlan, generateLessonPlanGrade11 } from '../../services/geminiService.ts';
+import Button from '../ui/Button.tsx';
+import ToolViewWrapper from './ToolViewWrapper.tsx';
+import { useDatabase } from '../../hooks/useDatabase.ts';
+import { useUnitDatabase } from '../../hooks/useUnitDatabase.ts';
+import PlanOutput from '../ui/PlanOutput.tsx';
+import { ogrenmeCiktilariOptions10, ogrenmeCiktilariOptions11, alanBecerileriOptions, kavramsalBecerilerOptions, egilimlerOptions, sosyalDuygusalOptions, degerlerOptions, okuryazarlikOptions, Option } from '../../data/unitDatabaseOptions.ts';
+import Accordion from '../ui/Accordion.tsx';
+import MultiSelectModal from '../ui/MultiSelectModal.tsx';
 
 interface Props {
   grade: Grade;
@@ -19,8 +19,8 @@ const outcomeMap11 = new Map<string, string>();
 ogrenmeCiktilariOptions11.forEach(unit => {
     if (unit.children) {
         unit.children.forEach(outcome => {
-            outcomeMap11.set(outcome.id + '.', outcome.label);
-            outcomeMap11.set(outcome.id.replace(/\./g, '') + '.', outcome.label); // Handle variations
+            outcomeMap11.set(outcome.value + '.', outcome.label);
+            outcomeMap11.set(outcome.value.replace(/\./g, '') + '.', outcome.label); // Handle variations
         });
     }
 });
@@ -62,7 +62,7 @@ const LessonPlanner: React.FC<Props> = ({ grade, onBack }) => {
 
     // --- Common State ---
     const [selectedUnitIndex, setSelectedUnitIndex] = useState<number>(0);
-    const [modalState, setModalState] = useState<{ isOpen: boolean; title: string; options: OptionNode[]; selected: string[]; onSave: (selected: string[]) => void; } | null>(null);
+    const [modalState, setModalState] = useState<{ isOpen: boolean; title: string; options: Option[]; selected: string[]; onSave: (selected: string[]) => void; } | null>(null);
 
 
     // --- Grade 10 State ---
@@ -109,7 +109,7 @@ const LessonPlanner: React.FC<Props> = ({ grade, onBack }) => {
         setPlanData(prev => prev ? { ...prev, [field]: value } : null);
     };
     
-    const openModal = (title: string, options: OptionNode[], selected: string[] | undefined, field: keyof UnitData) => {
+    const openModal = (title: string, options: Option[], selected: string[] | undefined, field: keyof UnitData) => {
         setModalState({
             isOpen: true, title, options, selected: selected || [],
             onSave: (newSelected) => {

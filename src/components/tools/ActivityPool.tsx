@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Tool, Activity, ActivityCategory, Grade, activityCategories, UnitData, UnitTopic } from '../../types.ts';
+import { Tool, Activity, ActivityCategory, Grade, activityCategories } from '../../types.ts';
 import ToolViewWrapper from './ToolViewWrapper.tsx';
 import { useActivityPool } from '../../hooks/useActivityPool.ts';
 import Card from '../ui/Card.tsx';
@@ -9,7 +9,6 @@ import { useUnitDatabase } from '../../hooks/useUnitDatabase.ts';
 import { generateActivity } from '../../services/geminiService.ts';
 import Button from '../ui/Button.tsx';
 import Loader from '../ui/Loader.tsx';
-// FIX: Changed import from the non-existent 'OptionNode' to the correct 'Option' interface.
 import { ogrenmeCiktilariOptions11, Option } from '../../data/unitDatabaseOptions.ts';
 
 interface Props {
@@ -18,7 +17,6 @@ interface Props {
 }
 
 const outcomeMap11 = new Map<string, string>();
-// FIX: Updated type from 'OptionNode' to 'Option' and property access from '.id' to '.value'.
 ogrenmeCiktilariOptions11.forEach((unit: Option) => {
     if (unit.children) {
         unit.children.forEach((outcome: Option) => {
@@ -117,12 +115,12 @@ const ActivityPool: React.FC<Props> = ({ grade, onBack }) => {
                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <FormField label="Ünite Seçin">
                                     <select value={selectedUnitIndex} onChange={e => setSelectedUnitIndex(parseInt(e.target.value, 10))} className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2">
-                                        {units.map((unit: UnitData, index: number) => <option key={index} value={index}>{unit.unitName}</option>)}
+                                        {units.map((unit, index) => <option key={index} value={index}>{unit.unitName}</option>)}
                                     </select>
                                 </FormField>
                                 <FormField label="Konu Seçin">
                                     <select value={selectedTopicIndex} onChange={e => setSelectedTopicIndex(parseInt(e.target.value, 10))} className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2" disabled={topics.length === 0}>
-                                        {topics.map((topic: UnitTopic, index: number) => <option key={index} value={index}>{topic.name}</option>)}
+                                        {topics.map((topic, index) => <option key={index} value={index}>{topic.name}</option>)}
                                     </select>
                                 </FormField>
                             </div>
@@ -178,7 +176,7 @@ const ActivityPool: React.FC<Props> = ({ grade, onBack }) => {
                     </Card>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {activities.map((activity: Activity) => (
+                        {activities.map(activity => (
                             <Card key={activity.id} onClick={() => setSelectedActivity(activity)} className="cursor-pointer flex flex-col">
                                 <div className="flex items-start justify-between mb-3">
                                     <h3 className="text-xl font-semibold text-white flex-grow pr-2">{activity.title}</h3>

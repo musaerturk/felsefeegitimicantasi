@@ -1,20 +1,20 @@
 import React, { useState, useCallback } from 'react';
-import Button from './Button';
-import { OptionNode } from '../../data/unitDatabaseOptions';
-import { ChevronDownIcon } from './Icons';
+import Button from './Button.tsx';
+import { Option } from '../../data/unitDatabaseOptions.ts';
+import { ChevronDownIcon } from './Icons.tsx';
 
 interface MultiSelectModalProps {
   title: string;
-  options: OptionNode[];
+  options: Option[];
   initialSelected: string[];
   onClose: () => void;
   onSave: (selected: string[]) => void;
 }
 
 const CheckboxTree: React.FC<{
-    nodes: OptionNode[];
+    nodes: Option[];
     selected: Set<string>;
-    onToggle: (id: string, children?: OptionNode[]) => void;
+    onToggle: (id: string, children?: Option[]) => void;
 }> = ({ nodes, selected, onToggle }) => {
     const [openNodes, setOpenNodes] = useState<Record<string, boolean>>({});
 
@@ -22,16 +22,16 @@ const CheckboxTree: React.FC<{
         setOpenNodes(prev => ({ ...prev, [id]: !prev[id] }));
     }
 
-    const renderNode = (node: OptionNode, level = 0) => {
-        const isSelected = selected.has(node.id);
+    const renderNode = (node: Option, level = 0) => {
+        const isSelected = selected.has(node.value);
         const hasChildren = node.children && node.children.length > 0;
-        const isOpen = hasChildren && openNodes[node.id];
+        const isOpen = hasChildren && openNodes[node.value];
 
         return (
-            <div key={node.id} style={{ marginLeft: `${level * 20}px` }}>
+            <div key={node.value} style={{ marginLeft: `${level * 20}px` }}>
                 <div className="flex items-center space-x-2 my-1">
                     {hasChildren && (
-                        <button onClick={() => handleToggleNode(node.id)} className="p-1 rounded-full hover:bg-gray-700">
+                        <button onClick={() => handleToggleNode(node.value)} className="p-1 rounded-full hover:bg-gray-700">
                              <ChevronDownIcon className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
                         </button>
                     )}
@@ -41,13 +41,13 @@ const CheckboxTree: React.FC<{
                         <input
                             type="checkbox"
                             checked={isSelected}
-                            onChange={() => onToggle(node.id, node.children)}
+                            onChange={() => onToggle(node.value, node.children)}
                             className="form-checkbox h-4 w-4 bg-gray-700 border-gray-600 text-indigo-500 focus:ring-indigo-500 rounded"
                         />
                         <span className="text-gray-300">{node.label}</span>
                     </label>
                 </div>
-                {isOpen && hasChildren && node.children.map(child => renderNode(child, level + 1))}
+                {isOpen && hasChildren && node.children!.map(child => renderNode(child, level + 1))}
             </div>
         );
     };
@@ -59,27 +59,27 @@ const CheckboxTree: React.FC<{
 const MultiSelectModal: React.FC<MultiSelectModalProps> = ({ title, options, initialSelected, onClose, onSave }) => {
   const [selected, setSelected] = useState(new Set(initialSelected));
 
-  const handleToggle = useCallback((id: string, children?: OptionNode[]) => {
+  const handleToggle = useCallback((value: string, children?: Option[]) => {
     const newSelected = new Set(selected);
     const descendantIds = children ? getAllDescendantIds(children) : [];
     
-    if (newSelected.has(id)) {
-        newSelected.delete(id);
+    if (newSelected.has(value)) {
+        newSelected.delete(value);
         descendantIds.forEach(childId => newSelected.delete(childId));
     } else {
-        newSelected.add(id);
+        newSelected.add(value);
         descendantIds.forEach(childId => newSelected.add(childId));
     }
     
     setSelected(newSelected);
   }, [selected]);
   
-  const getAllDescendantIds = (nodes: OptionNode[]): string[] => {
+  const getAllDescendantIds = (nodes: Option[]): string[] => {
       let ids: string[] = [];
       for (const node of nodes) {
-          ids.push(node.id);
+          ids.push(node.value);
           if (node.children) {
-              ids = [...ids, ...getAllDescendantIds(node.children)];
+              ids = [...ids, ...getAllDescendantIds(node.children!)];
           }
       }
       return ids;

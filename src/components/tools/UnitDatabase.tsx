@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { Grade, Tool, UnitData } from '../../types';
-import ToolViewWrapper from './ToolViewWrapper';
-import { useUnitDatabase } from '../../hooks/useUnitDatabase';
-import Accordion from '../ui/Accordion';
-import Button from '../ui/Button';
-import MultiSelectModal from '../ui/MultiSelectModal';
+import { Grade, Tool, UnitData } from '../../types.ts';
+import ToolViewWrapper from './ToolViewWrapper.tsx';
+import { useUnitDatabase } from '../../hooks/useUnitDatabase.ts';
+import Accordion from '../ui/Accordion.tsx';
+import Button from '../ui/Button.tsx';
+import MultiSelectModal from '../ui/MultiSelectModal.tsx';
 import { 
     alanBecerileriOptions, 
     egilimlerOptions, 
@@ -14,9 +14,9 @@ import {
     ogrenmeCiktilariOptions10,
     ogrenmeCiktilariOptions11,
     kavramsalBecerilerOptions,
-    OptionNode 
-} from '../../data/unitDatabaseOptions';
-import Card from '../ui/Card';
+    Option 
+} from '../../data/unitDatabaseOptions.ts';
+import Card from '../ui/Card.tsx';
 
 interface Props {
   grade: Grade;
@@ -27,9 +27,9 @@ const outcomeMap11 = new Map<string, string>();
 ogrenmeCiktilariOptions11.forEach(unit => {
     if (unit.children) {
         unit.children.forEach(outcome => {
-            outcomeMap11.set(outcome.id + '.', outcome.label);
+            outcomeMap11.set(outcome.value + '.', outcome.label);
             // Handle variations like "11.1.1." vs "1111."
-            outcomeMap11.set(outcome.id.replace(/\./g, '') + '.', outcome.label); 
+            outcomeMap11.set(outcome.value.replace(/\./g, '') + '.', outcome.label); 
         });
     }
 });
@@ -70,7 +70,7 @@ const UnitDatabase: React.FC<Props> = ({ grade, onBack }) => {
     const [modalState, setModalState] = useState<{
         isOpen: boolean;
         title: string;
-        options: OptionNode[];
+        options: Option[];
         selected: string[];
         onSave: (selected: string[]) => void;
     } | null>(null);
@@ -83,7 +83,7 @@ const UnitDatabase: React.FC<Props> = ({ grade, onBack }) => {
         updateUnit(activeUnitIndex, updatedUnit);
     }, [activeUnit, activeUnitIndex, updateUnit]);
 
-    const openModal = (title: string, options: OptionNode[], selected: string[] | undefined, field: keyof UnitData) => {
+    const openModal = (title: string, options: Option[], selected: string[] | undefined, field: keyof UnitData) => {
         setModalState({
             isOpen: true,
             title,
