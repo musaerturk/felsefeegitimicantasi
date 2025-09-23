@@ -1,7 +1,9 @@
+
+
 import React, { useState, useCallback } from 'react';
-import Button from './Button.tsx';
-import { Option } from '../../data/unitDatabaseOptions.ts';
-import { ChevronDownIcon } from './Icons.tsx';
+import Button from './Button';
+import { Option } from '../../data/unitDatabaseOptions';
+import { ChevronDownIcon } from './Icons';
 
 interface MultiSelectModalProps {
   title: string;
@@ -14,12 +16,12 @@ interface MultiSelectModalProps {
 const CheckboxTree: React.FC<{
     nodes: Option[];
     selected: Set<string>;
-    onToggle: (id: string, children?: Option[]) => void;
+    onToggle: (value: string, children?: Option[]) => void;
 }> = ({ nodes, selected, onToggle }) => {
     const [openNodes, setOpenNodes] = useState<Record<string, boolean>>({});
 
-    const handleToggleNode = (id: string) => {
-        setOpenNodes(prev => ({ ...prev, [id]: !prev[id] }));
+    const handleToggleNode = (value: string) => {
+        setOpenNodes(prev => ({ ...prev, [value]: !prev[value] }));
     }
 
     const renderNode = (node: Option, level = 0) => {
@@ -47,7 +49,7 @@ const CheckboxTree: React.FC<{
                         <span className="text-gray-300">{node.label}</span>
                     </label>
                 </div>
-                {isOpen && hasChildren && node.children!.map(child => renderNode(child, level + 1))}
+                {isOpen && hasChildren && node.children.map((child: Option) => renderNode(child, level + 1))}
             </div>
         );
     };
@@ -79,7 +81,7 @@ const MultiSelectModal: React.FC<MultiSelectModalProps> = ({ title, options, ini
       for (const node of nodes) {
           ids.push(node.value);
           if (node.children) {
-              ids = [...ids, ...getAllDescendantIds(node.children!)];
+              ids = [...ids, ...getAllDescendantIds(node.children)];
           }
       }
       return ids;
